@@ -6,7 +6,7 @@ import { Pane } from "tweakpane";
 
 
 // initialize pane
-const pane = new Pane();
+
 
 
 // initialize the scene
