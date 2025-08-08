@@ -20,7 +20,7 @@ cubeTextureLoader.setPath('/textures/cubeMap/')
 
 
 // adding textures
-const sunTexture = textureLoader.load("/textures/2k_sun.jpg");
+const sunTexture = textureLoader.load("./textures/2k_sun.jpg");
 sunTexture.colorSpace = THREE.SRGBColorSpace  
 const mercuryTexture = textureLoader.load("/textures/2k_mercury.jpg");
 mercuryTexture.colorSpace = THREE.SRGBColorSpace
