@@ -40,6 +40,65 @@
             z-index: 10000;
             font-size: 1rem;
         }
+
+        /* Dropdown styling */
+        #planetSelect {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 10001;
+            padding: 8px;
+            font-size: 1rem;
+            background: rgba(0,0,0,0.3); /* More transparent */
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+
+            /* Remove default background on open */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+
+            /* For Firefox to show transparent dropdown panel */
+            background-clip: padding-box;
+        }
+
+        /* Transparent dropdown panel styling for Chrome, Edge, Safari */
+        #planetSelect option {
+            background: rgba(0,0,0,0.3);
+            color: white;
+        }
+
+        /* For Firefox dropdown options */
+        @-moz-document url-prefix() {
+            #planetSelect {
+                background: transparent !important;
+            }
+            #planetSelect option {
+                background: rgba(0,0,0,0.3) !important;
+                color: white !important;
+            }
+        }
+
+        /* Planet info box with white neon outline */
+  #planetInfo {
+    position: fixed;
+    top: 20px;          /* position near the top */
+    right: 20px;        /* position near the right */
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    max-width: 300px;
+    text-align: left;   /* align text to left for readability */
+    z-index: 10001;
+    display: none;
+    white-space: pre-wrap; /* preserve line breaks */
+    border: 2px solid #00ffff; /* neon-ish white/blue outline */
+    box-shadow: 0 0 10px #00ffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
     </style>
 </head>
 <body>
@@ -47,6 +106,23 @@
     <div id="rotateOverlay">
         <p>🔄 Please rotate your device for the best experience 👩‍🚀</p>
     </div>
+
+    <!-- Dropdown to select planets -->
+    <select id="planetSelect">
+        <option value="solar">🌌 View Entire Solar System</option>
+        <option value="Sun">☀️ Sun</option>
+        <option value="Mercury">Mercury</option>
+        <option value="Venus">Venus</option>
+        <option value="Earth">Earth</option>
+        <option value="Mars">Mars</option>
+        <option value="Jupiter">Jupiter</option>
+        <option value="Saturn">Saturn</option>
+        <option value="Uranus">Uranus</option>
+        <option value="Neptune">Neptune</option>
+    </select>
+
+    <!-- Planet info box -->
+    <div id="planetInfo"></div>
 
     <!-- Fullscreen hint -->
     <div id="fullscreenHint">Tap here for Fullscreen 🚀</div>
@@ -92,3 +168,4 @@
     </script>
 </body>
 </html>
+
