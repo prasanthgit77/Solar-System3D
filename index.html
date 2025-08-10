@@ -5,7 +5,7 @@
     <title>Solar System</title>
     <link rel="stylesheet" href="/style.css">
     <style>
-        /* Overlay for mobile portrait mode */
+       
         #rotateOverlay {
             display: none;
             position: fixed;
@@ -26,7 +26,7 @@
             padding: 20px;
         }
 
-        /* Fullscreen trigger hint */
+        
         #fullscreenHint {
             position: fixed;
             bottom: 20px;
@@ -41,7 +41,7 @@
             font-size: 1rem;
         }
 
-        /* Dropdown styling */
+       
         #planetSelect {
             position: fixed;
             top: 20px;
@@ -49,27 +49,27 @@
             z-index: 10001;
             padding: 8px;
             font-size: 1rem;
-            background: rgba(0,0,0,0.3); /* More transparent */
+            background: rgba(0,0,0,0.3); 
             color: white;
             border: 1px solid white;
             border-radius: 5px;
 
-            /* Remove default background on open */
+            
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
 
-            /* For Firefox to show transparent dropdown panel */
+           
             background-clip: padding-box;
         }
 
-        /* Transparent dropdown panel styling for Chrome, Edge, Safari */
+        
         #planetSelect option {
             background: rgba(0,0,0,0.3);
             color: white;
         }
 
-        /* For Firefox dropdown options */
+       
         @-moz-document url-prefix() {
             #planetSelect {
                 background: transparent !important;
@@ -80,21 +80,21 @@
             }
         }
 
-        /* Planet info box with white neon outline */
+       
   #planetInfo {
     position: fixed;
-    top: 20px;          /* position near the top */
-    right: 20px;        /* position near the right */
+    top: 20px;          
+    right: 20px;       
     background: rgba(0,0,0,0.7);
     color: white;
     padding: 15px 20px;
     border-radius: 10px;
     max-width: 300px;
-    text-align: left;   /* align text to left for readability */
+    text-align: left;  
     z-index: 10001;
     display: none;
-    white-space: pre-wrap; /* preserve line breaks */
-    border: 2px solid #00ffff; /* neon-ish white/blue outline */
+    white-space: pre-wrap;
+    border: 2px solid #00ffff; 
     box-shadow: 0 0 10px #00ffff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -102,12 +102,12 @@
     </style>
 </head>
 <body>
-    <!-- Overlay message -->
+  
     <div id="rotateOverlay">
         <p>🔄 Please rotate your device for the best experience 👩‍🚀</p>
     </div>
 
-    <!-- Dropdown to select planets -->
+    
     <select id="planetSelect">
         <option value="solar">🌌 View Entire Solar System</option>
         <option value="Sun">☀️ Sun</option>
@@ -121,19 +121,19 @@
         <option value="Neptune">Neptune</option>
     </select>
 
-    <!-- Planet info box -->
+   
     <div id="planetInfo"></div>
 
-    <!-- Fullscreen hint -->
+ 
     <div id="fullscreenHint">Tap here for Fullscreen 🚀</div>
 
-    <!-- Three.js Canvas -->
+   
     <canvas class="threejs"></canvas>
 
-    <!-- Your script -->
+    
     <script type="module" src="/script.js"></script>
 
-    <!-- Orientation + Fullscreen -->
+  
     <script>
         function checkOrientation() {
             const isPortrait = window.innerHeight > window.innerWidth;
@@ -146,20 +146,20 @@
             }
         }
 
-        // Fullscreen function
+      
         function goFullscreen() {
             const docEl = document.documentElement;
             if (docEl.requestFullscreen) {
                 docEl.requestFullscreen();
-            } else if (docEl.webkitRequestFullscreen) { // Safari
+            } else if (docEl.webkitRequestFullscreen) { 
                 docEl.webkitRequestFullscreen();
-            } else if (docEl.msRequestFullscreen) { // IE/Edge
+            } else if (docEl.msRequestFullscreen) { 
                 docEl.msRequestFullscreen();
             }
             document.getElementById("fullscreenHint").style.display = "none";
         }
 
-        // Add listener to hint
+      
         document.getElementById("fullscreenHint").addEventListener("click", goFullscreen);
 
         window.addEventListener("resize", checkOrientation);

@@ -1,15 +1,15 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-// initialize the scene
+
 const scene = new THREE.Scene();
 
-// add textureLoader
+
 const textureLoader = new THREE.TextureLoader();
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 cubeTextureLoader.setPath('/textures/cubeMap/');
 
-// loading textures
+
 const sunTexture = textureLoader.load("/textures/2k_sun.jpg");
 sunTexture.colorSpace = THREE.SRGBColorSpace;
 const mercuryTexture = textureLoader.load("/textures/2k_mercury.jpg");
@@ -33,12 +33,12 @@ neptuneTexture.colorSpace = THREE.SRGBColorSpace;
 const saturnRingsTexture = textureLoader.load("/textures/saturnrings.png");
 saturnRingsTexture.colorSpace = THREE.SRGBColorSpace;
 
-// background
+
 const backgroundCubemap = cubeTextureLoader.load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']);
 backgroundCubemap.colorSpace = THREE.SRGBColorSpace;
 scene.background = backgroundCubemap;
 
-// materials
+
 const mercuryMaterial = new THREE.MeshStandardMaterial({ map: mercuryTexture });
 const venusMaterial = new THREE.MeshStandardMaterial({ map: venusTexture });
 const earthMaterial = new THREE.MeshStandardMaterial({ map: earthTexture });
@@ -50,17 +50,16 @@ const uranusMaterial = new THREE.MeshStandardMaterial({ map: uranusTexture });
 const neptuneMaterial = new THREE.MeshStandardMaterial({ map: neptuneTexture });
 const ringMaterial = new THREE.MeshBasicMaterial({ map: saturnRingsTexture, side: THREE.DoubleSide });
 
-// geometries
 const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
 const sunMaterial = new THREE.MeshBasicMaterial({ map: sunTexture });
 const ringGeometry = new THREE.RingGeometry(3, 5, 64);
 
-// Sun
+
 const sun = new THREE.Mesh(sphereGeometry, sunMaterial);
 sun.scale.setScalar(5);
 scene.add(sun);
 
-// planets data
+
 const planets = [
     { name: "Mercury", radius: 0.5, distance: 10, speed: 0.01, material: mercuryMaterial, moons: [] },
     { name: "Venus", radius: 0.8, distance: 15, speed: 0.007, material: venusMaterial, moons: [] },
@@ -90,7 +89,7 @@ const planets = [
       moons: [{ name: "Triton", radius: 0.12, distance: 4, speed: -0.015 }] }
 ];
 
-// Saturn
+
 const saturnMesh = new THREE.Mesh(sphereGeometry, saturnMaterial);
 saturnMesh.scale.setScalar(2.2);
 saturnMesh.position.x = 50;
@@ -101,7 +100,7 @@ rings.rotation.x = Math.PI / 2;
 rings.position.x = 50;
 scene.add(rings);
 
-// functions
+
 const createPlanet = (planet) => {
     const planetMesh = new THREE.Mesh(sphereGeometry, planet.material);
     planetMesh.scale.setScalar(planet.radius);
@@ -116,7 +115,7 @@ const createMoon = (moon) => {
     return moonMesh;
 };
 
-// planet meshes
+
 const planetMeshes = planets.map((planet) => {
     const planetMesh = createPlanet(planet);
     scene.add(planetMesh);
@@ -127,21 +126,21 @@ const planetMeshes = planets.map((planet) => {
     return planetMesh;
 });
 
-// lights
+
 scene.add(new THREE.AmbientLight(0xffffff, 0.3));
 scene.add(new THREE.PointLight(0xffffff, 1000));
 
-// camera
+
 const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 400);
 camera.position.set(0, 5, 150);
 
-// renderer
+
 const canvas = document.querySelector("canvas.threejs");
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-// controls
+
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
@@ -150,45 +149,39 @@ controls.zoomSpeed = 0.5;   // slower zoom
 controls.maxDistance = 200;
 controls.minDistance = 5;
 
-// resize listener
+
 window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// ------------------------------------------------------------------
-// CAMERA FOLLOW SYSTEM (enhanced)
-// - Smooth transition to planet on selection
-// - Then lock/follow the planet while maintaining ability to use OrbitControls
-// - User interactions update the follow offset so the camera continues to follow user's viewpoint
-// ------------------------------------------------------------------
+
 
 let followTarget = null;
 
-// default follow offset used for transition and base follow (can be updated by user interactions)
 const defaultFollowOffset = new THREE.Vector3(0, 3, 10);
 let followOffset = defaultFollowOffset.clone();
 
-// transition state
+
 let isTransitioning = false;
 let transitionTarget = new THREE.Vector3();
 
-// interaction flag - set while the user is interacting with the controls
+
 let isUserInteracting = false;
 
-// lerp / speed tuning (lower values -> slower/smoother)
-const TRANSITION_LERP = 0.06; // speed for initial move-to-planet
-const FOLLOW_LERP = 0.03;     // speed camera uses while following (slower for smoother)
-const TARGET_LERP = 0.12;     // speed to move controls.target to planet
 
-// Setup control event listeners to know when the user is interacting
+const TRANSITION_LERP = 0.06; 
+const FOLLOW_LERP = 0.03;     
+const TARGET_LERP = 0.12;     
+
+
 controls.addEventListener('start', () => {
     isUserInteracting = true;
 });
 controls.addEventListener('end', () => {
     isUserInteracting = false;
-    // When user finishes interaction, if we're following a planet we update the followOffset
+   
     if (followTarget) {
         const wp = new THREE.Vector3();
         followTarget.getWorldPosition(wp);
@@ -196,10 +189,10 @@ controls.addEventListener('end', () => {
     }
 });
 
-// Also track mouse/touch down/up on canvas as a fallback
+
 canvas.addEventListener('pointerdown', () => { isUserInteracting = true; });
 window.addEventListener('pointerup', () => {
-    // tiny timeout to ensure OrbitControls 'end' runs first in some browsers
+    
     setTimeout(() => {
         isUserInteracting = false;
         if (followTarget) {
@@ -210,7 +203,6 @@ window.addEventListener('pointerup', () => {
     }, 0);
 });
 
-// planet map for dropdown lookup
 const planetMap = {
     Sun: sun,
     Mercury: planetMeshes[0],
@@ -223,7 +215,7 @@ const planetMap = {
     Neptune: planetMeshes[6]
 };
 
-// planet info text
+
 const planetData = {
   Sun: `The Sun is the star at the center of the Solar System.
 
@@ -316,45 +308,44 @@ It has 14 known moons, with Triton being the largest.
 Neptune appears a deep blue color due to methane in its atmosphere.`
 };
 
-// dropdown event - smooth transition then follow
 document.getElementById("planetSelect").addEventListener("change", (e) => {
     const value = e.target.value;
     const infoBox = document.getElementById("planetInfo");
 
     if (value === "solar") {
-        // go back to solar view
+        
         followTarget = null;
         isTransitioning = false;
         transitionTarget.set(0, 5, 150);
-        camera.position.lerp(transitionTarget, 0.2); // quick reposition (user still can control)
+        camera.position.lerp(transitionTarget, 0.2); 
         controls.target.set(0, 0, 0);
         infoBox.style.display = "none";
     } else {
-        // start following the selected planet
+        
         followTarget = planetMap[value];
 
-        // compute world position of planet now
+      
         const worldPos = new THREE.Vector3();
         followTarget.getWorldPosition(worldPos);
 
-        // pick an initial offset for the transition — we use default so camera moves to a consistent location near planet
+        
         followOffset.copy(defaultFollowOffset);
 
-        // transition target is planet position + offset
+        
         transitionTarget.copy(worldPos).add(followOffset);
 
-        // set transitioning flag so render loop will move camera there smoothly
+        
         isTransitioning = true;
 
-        // show info
+      
         infoBox.style.display = "block";
         infoBox.innerText = planetData[value] || "No data available.";
     }
 });
 
-// animation loop
+
 const renderloop = () => {
-    // update planet positions
+   
     planetMeshes.forEach((planet, planetIndex) => {
         planet.rotation.y += planets[planetIndex].speed;
         planet.position.x = Math.sin(planet.rotation.y) * planets[planetIndex].distance;
@@ -369,7 +360,7 @@ const renderloop = () => {
         });
     });
 
-    // Saturn position
+   
     saturnMesh.rotation.y += 0.0015;
     rings.rotation.y += 0.0015;
     saturnMesh.position.x = Math.sin(saturnMesh.rotation.y) * 50;
@@ -377,38 +368,38 @@ const renderloop = () => {
     rings.position.x = saturnMesh.position.x;
     rings.position.z = saturnMesh.position.z;
 
-    // camera follows planet but still allows OrbitControls
+   
     if (followTarget) {
         const worldPos = new THREE.Vector3();
         followTarget.getWorldPosition(worldPos);
 
-        // Smoothly move controls.target to the planet (so orbit/panning remains centered on the planet)
+        
         controls.target.lerp(worldPos, TARGET_LERP);
 
         if (isTransitioning) {
-            // During initial transition, lerp camera to the transitionTarget
+            
             camera.position.lerp(transitionTarget, TRANSITION_LERP);
 
-            // If close enough, consider transition finished and switch to follow mode
+            
             if (camera.position.distanceTo(transitionTarget) < 0.25) {
                 isTransitioning = false;
 
-                // After arriving, recalc followOffset (camera - planet) so follow continues from current view
+             
                 const arrivedWorld = new THREE.Vector3();
                 followTarget.getWorldPosition(arrivedWorld);
                 followOffset.copy(camera.position).sub(arrivedWorld);
-                // small safeguard: if followOffset is tiny, set to default
+                
                 if (followOffset.length() < 0.5) followOffset.copy(defaultFollowOffset);
             }
         } else {
-            // Normal follow mode:
-            // If the user is interacting, update followOffset so camera preserves user's viewpoint while following
+            
+
             if (isUserInteracting) {
                 const wp = new THREE.Vector3();
                 followTarget.getWorldPosition(wp);
                 followOffset.copy(camera.position).sub(wp);
             } else {
-                // not interacting: move camera smoothly so it keeps the same offset relative to the planet
+               
                 const desiredPos = worldPos.clone().add(followOffset);
                 camera.position.lerp(desiredPos, FOLLOW_LERP);
             }
